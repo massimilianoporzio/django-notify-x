@@ -14,6 +14,7 @@ from django.views.decorators.http import require_POST
 from .models import Notification
 from .utils import render_notification
 
+
 # TODO: Convert function-based views to Class-based views.
 
 
@@ -249,17 +250,16 @@ def notification_update(request):
         for nf in new_notifications:
             notification = nf.as_json()
             notification_list.append(notification)
-            notification['html'] = render_notification(
-                nf, render_target=target, **notification)
+            notification['html'] = render_notification(nf, render_target=target, **notification)
 
-       ctx = {
+        ctx = {
             "retrieved": len(new_notifications),
             "actives": request.user.notifications.active().count(),
             "unread_count": request.user.notifications.unread().count(),
             "active_unread_count": request.user.notifications.active().unread().count(),
             "notifications": notification_list,
             "success": True,
-            "msg": msg,
+            "msg": msg
         }
 
         return JsonResponse(ctx)
