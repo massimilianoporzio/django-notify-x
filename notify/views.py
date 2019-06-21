@@ -91,7 +91,11 @@ def mark(request):
         success = False
         msg = _("Invalid Notification ID")
 
-    ctx = {'msg': msg, 'success': success, 'action': action}
+    ctx = {
+        'msg': msg, 'success': success, 'action': action,
+        "active_unread_count": request.user.notifications.active().unread().count(),
+        "actives": request.user.notifications.active().count(),
+    }
 
     return notification_redirect(request, ctx)
 
@@ -162,7 +166,8 @@ def delete(request):
         success = False
         msg = _("Invalid Notification ID")
 
-    ctx = {'msg': msg, 'success': success, }
+    ctx = {'msg': msg, 'success': success, "active_unread_count": request.user.notifications.active().unread().count(),
+           "actives": request.user.notifications.active().count(), }
 
     return notification_redirect(request, ctx)
 
@@ -247,9 +252,11 @@ def notification_update(request):
             notification['html'] = render_notification(
                 nf, render_target=target, **notification)
 
-        ctx = {
+       ctx = {
             "retrieved": len(new_notifications),
+            "actives": request.user.notifications.active().count(),
             "unread_count": request.user.notifications.unread().count(),
+            "active_unread_count": request.user.notifications.active().unread().count(),
             "notifications": notification_list,
             "success": True,
             "msg": msg,
