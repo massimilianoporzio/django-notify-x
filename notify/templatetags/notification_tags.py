@@ -55,7 +55,8 @@ class RenderNotificationsNode(template.Node):
             html = render_notification(nf, render_target=self.target, **extra)
             html_chunks.append(html)
         if not html_chunks:
-            html_chunks.append(_("<b>No notifications yet.</b>"))
+            html_chunks.append(
+                _("<div class='text-center' id='no-notifications'><b>No notifications yet.</b></div>"))
         html_string = '\n'.join(html_chunks)
         return html_string
 
@@ -139,7 +140,8 @@ class UserNotification(RenderNotificationsNode):
         if len(tokens) > 3:
             raise template.TemplateSyntaxError(_("Max arguments are two"))
         elif tokens[1] != 'for':
-            raise template.TemplateSyntaxError(_("First argument must be 'for'"))
+            raise template.TemplateSyntaxError(
+                _("First argument must be 'for'"))
         elif not tokens[2]:
             raise template.TemplateSyntaxError(
                 _("Second argument must either 'box' or 'page'"))
