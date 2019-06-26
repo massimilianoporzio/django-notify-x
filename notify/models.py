@@ -10,7 +10,8 @@ from django.utils.timesince import timesince
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import force_text
 from django.utils.functional import cached_property
-
+import pytz
+from datetime import timezone, datetime, timedelta
 from .utils import prefetch_relations
 
 
@@ -408,6 +409,9 @@ class Notification(models.Model):
 
         :return: Dictionary format of the QuerySet object.
         """
+        localCreated = self.created.astimezone(pytz.utc)
+        localCreated = localCreated.replace(tzinfo=timezone(timedelta(hours=-2)))
+        
         data = {
             "id": self.id,
             "actor": self.do_escape(self.actor),
@@ -421,6 +425,7 @@ class Notification(models.Model):
             "obj": self.do_escape(self.obj),
             "obj_url": self.do_escape(self.obj_url),
             "created": self.created,
+            "localCreated": localCreated,
             "data": self.extra,
         }
         return data
