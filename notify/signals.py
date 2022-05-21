@@ -1,7 +1,7 @@
 from django import dispatch
 from django.dispatch import receiver
 from notify.models import Notification
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 
 notify = dispatch.Signal(providing_args=[
