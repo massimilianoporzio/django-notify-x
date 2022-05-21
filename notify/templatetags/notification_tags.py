@@ -5,7 +5,7 @@ try:
 except ImportError:
     from django.urls import reverse
 
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from .. import notify_settings
 from ..utils import render_notification
 
